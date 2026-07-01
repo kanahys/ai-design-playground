@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSAP できること図鑑</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131c;
+    --surface2: #191924;
+    --border: #23232f;
+    --accent: #c8f05a;
+    --accent2: #5af0c8;
+    --accent3: #f05ac8;
+    --text: #e8e8f0;
+    --muted: #6a6a82;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  .mono { font-family: 'Space Mono', monospace; }
+
+  /* ── HERO ── */
+  header {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8vh 6vw 6vh;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  header h1 {
+    font-size: clamp(2.4rem, 8vw, 6rem);
+    font-weight: 900;
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+  }
+  header h1 .line { display: block; overflow: hidden; }
+  header h1 .line span { display: inline-block; }
+  header p.lead {
+    margin-top: 1.8rem;
+    max-width: 46ch;
+    color: var(--muted);
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+    line-height: 1.7;
+  }
+  .hero-note {
+    position: absolute;
+    right: 6vw;
+    bottom: 6vh;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.6;
+  }
+
+  /* ── GRID ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .card {
+    background: var(--bg);
+    padding: 2rem 1.8rem 2.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    min-height: 340px;
+  }
+  .card-head { display: flex; align-items: baseline; gap: 0.8rem; }
+  .card-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+  }
+  .card-title { font-size: 1.15rem; font-weight: 700; }
+  .card-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+
+  .stage {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+  }
+
+  .btn {
+    align-self: flex-start;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    padding: 0.55rem 1.1rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform 0.12s ease, background 0.2s ease;
+  }
+  .btn:hover { background: #d8ff6a; }
+  .btn:active { transform: scale(0.96); }
+  .btn:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+
+  /* demo shapes */
+  .box {
+    width: 54px; height: 54px; border-radius: 12px;
+    background: var(--accent2);
+  }
+  .dots { display: flex; gap: 10px; }
+  .dot { width: 18px; height: 18px; border-radius: 50%; background: var(--accent3); }
+  .count { font-family: 'Space Mono', monospace; font-size: 2.6rem; font-weight: 700; color: var(--accent); }
+  .scramble { font-family: 'Space Mono', monospace; font-size: 1.3rem; letter-spacing: 0.05em; }
+  .tl-row { display: flex; gap: 12px; }
+  .tl-item { width: 30px; height: 30px; border-radius: 8px; background: var(--accent); }
+  .mag {
+    width: 130px; height: 46px; border-radius: 999px;
+    background: transparent; border: 1.5px solid var(--accent2);
+    color: var(--accent2); font-family: 'Space Mono', monospace; font-size: 0.8rem;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  svg .draw { fill: none; stroke: var(--accent3); stroke-width: 3; stroke-linecap: round; }
+
+  /* scroll reveal */
+  .reveal-strip {
+    padding: 10vh 6vw;
+    border-bottom: 1px solid var(--border);
+  }
+  .reveal-strip h2 {
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    font-weight: 900;
+    margin-bottom: 2rem;
+  }
+  .reveal-strip h2 .r-word { display: inline-block; opacity: 0; }
+  .reveal-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 1rem; }
+  .reveal-cards .rc {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 1.5rem; opacity: 0; transform: translateY(30px);
+  }
+  .rc .mono { font-size: 0.7rem; color: var(--accent2); }
+  .rc p { margin-top: 0.6rem; font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+  footer {
+    padding: 6vh 6vw;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">GSAP · Interactive Reference</div>
+  <h1>
+    <span class="line"><span class="hw">できることを、</span></span>
+    <span class="line"><span class="hw">動かして掴む。</span></span>
+  </h1>
+  <p class="lead">Figmaでは「状態」しか作れない。その間に起きる動きこそ、触って理解する。各カードの「再生」を押すと、代表的なGSAPパターンがその場で動きます。</p>
+  <div class="hero-note mono">sample output<br>AI-assisted / GSAP 3.12</div>
+</header>
+
+<div class="grid" id="grid">
+
+  <div class="card">
+    <div class="card-head"><span class="card-num">01</span><span class="card-title">Basic Tween</span></div>
+    <p class="card-desc">位置・回転・スケールを1行で。すべての基本。</p>
+    <div class="stage"><div class="box" id="d1"></div></div>
+    <button class="btn" data-demo="1">再生 ▶</button>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-num">02</span><span class="card-title">Timeline</span></div>
+    <p class="card-desc">複数の動きを順番につなぐ。演出の設計図。</p>
+    <div class="stage"><div class="tl-row"><div class="tl-item" id="t1"></div><div class="tl-item" id="t2"></div><div class="tl-item" id="t3"></div></div></div>
+    <button class="btn" data-demo="2">再生 ▶</button>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-num">03</span><span class="card-title">Stagger</span></div>
+    <p class="card-desc">要素を少しずつ遅らせて連鎖させる。</p>
+    <div class="stage"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+    <button class="btn" data-demo="3">再生 ▶</button>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-num">04</span><span class="card-title">Counter</span></div>
+    <p class="card-desc">数値を滑らかにカウントアップ。KPI表示に。</p>
+    <div class="stage"><div class="count" id="cnt">0</div></div>
+    <button class="btn" data-demo="4">再生 ▶</button>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-num">05</span><span class="card-title">Text Scramble</span></div>
+    <p class="card-desc">文字がノイズから収束する。テック系の定番。</p>
+    <div class="stage"><div class="scramble" id="scr">LEADGRID</div></div>
+    <button class="btn" data-demo="5">再生 ▶</button>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-num">06</span><span class="card-title">Magnetic Button</span></div>
+    <p class="card-desc">カーソルに吸い付く。マウスを近づけてみて。</p>
+    <div class="stage"><div class="mag" id="mag">HOVER ME</div></div>
+    <button class="btn" data-demo="6">リセット ↺</button>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-num">07</span><span class="card-title">SVG Draw</span></div>
+    <p class="card-desc">線が描かれていく。ロゴや装飾の登場に。</p>
+    <div class="stage">
+      <svg width="120" height="120" viewBox="0 0 120 120">
+        <path class="draw" id="path1" d="M20,90 Q40,20 60,60 T100,30"/>
+      </svg>
+    </div>
+    <button class="btn" data-demo="7">再生 ▶</button>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-num">08</span><span class="card-title">Elastic Pop</span></div>
+    <p class="card-desc">跳ねる登場。イージングで質感が変わる。</p>
+    <div class="stage"><div class="box" id="d8" style="background:var(--accent)"></div></div>
+    <button class="btn" data-demo="8">再生 ▶</button>
+  </div>
+
+</div>
+
+<section class="reveal-strip">
+  <h2 id="revealHead"></h2>
+  <div class="reveal-cards">
+    <div class="rc"><span class="mono">ScrollTrigger</span><p>スクロール位置に連動して発火。LPの主役。</p></div>
+    <div class="rc"><span class="mono">Pinning</span><p>要素を固定しながら背後を進める演出。</p></div>
+    <div class="rc"><span class="mono">Scrub</span><p>スクロール量とアニメを直結させる。</p></div>
+    <div class="rc"><span class="mono">Batch</span><p>複数要素の登場をまとめて管理。</p></div>
+  </div>
+</section>
+
+<footer>
+  <span>GSAP できること図鑑 — sample output</span>
+  <span>AI-assisted deliverable · for internal share</span>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// hero load
+gsap.from(".hw", { yPercent: 110, duration: 0.9, ease: "power4.out", stagger: 0.12, delay: 0.15 });
+gsap.from(".lead", { opacity: 0, y: 20, duration: 0.8, delay: 0.6 });
+
+const q = (s) => document.querySelector(s);
+
+const demos = {
+  1: () => gsap.fromTo("#d1", {x:-60, rotation:0}, {x:60, rotation:180, duration:1, ease:"power2.inOut", yoyo:true, repeat:1}),
+  2: () => { const tl = gsap.timeline();
+    tl.fromTo("#t1",{y:30,opacity:0},{y:0,opacity:1,duration:0.4})
+      .fromTo("#t2",{y:30,opacity:0},{y:0,opacity:1,duration:0.4},"-=0.2")
+      .fromTo("#t3",{y:30,opacity:0},{y:0,opacity:1,duration:0.4},"-=0.2")
+      .to(".tl-item",{scale:1.2,duration:0.25,stagger:0.1,yoyo:true,repeat:1}); },
+  3: () => gsap.fromTo(".dot",{scale:0.2,opacity:0.3},{scale:1,opacity:1,duration:0.5,stagger:0.12,ease:"back.out(2)",yoyo:true,repeat:1}),
+  4: () => { const o={v:0}; gsap.to(o,{v:1284,duration:1.6,ease:"power2.out",onUpdate:()=>q("#cnt").textContent=Math.floor(o.v).toLocaleString()}); },
+  5: () => scramble(q("#scr"), "LEADGRID"),
+  6: () => gsap.to("#mag",{x:0,y:0,duration:0.4,ease:"elastic.out(1,0.3)"}),
+  7: () => { const p=q("#path1"); const len=p.getTotalLength(); gsap.set(p,{strokeDasharray:len,strokeDashoffset:len}); gsap.to(p,{strokeDashoffset:0,duration:1.4,ease:"power1.inOut"}); },
+  8: () => gsap.fromTo("#d8",{scale:0},{scale:1,duration:1.1,ease:"elastic.out(1,0.4)"}),
+};
+
+document.querySelectorAll(".btn[data-demo]").forEach(b=>{
+  b.addEventListener("click",()=>demos[b.dataset.demo]());
+});
+
+// scramble helper
+function scramble(el, final){
+  const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&$";
+  let frame=0; const total=30;
+  const id=setInterval(()=>{
+    let out="";
+    for(let i=0;i<final.length;i++){
+      out += (i < final.length*(frame/total)) ? final[i] : chars[Math.floor(Math.random()*chars.length)];
+    }
+    el.textContent=out; frame++;
+    if(frame>total){clearInterval(id); el.textContent=final;}
+  },40);
+}
+
+// magnetic
+const mag=q("#mag");
+mag.addEventListener("mousemove",(e)=>{
+  const r=mag.getBoundingClientRect();
+  const x=e.clientX-(r.left+r.width/2);
+  const y=e.clientY-(r.top+r.height/2);
+  gsap.to(mag,{x:x*0.5,y:y*0.5,duration:0.3});
+});
+mag.addEventListener("mouseleave",()=>gsap.to(mag,{x:0,y:0,duration:0.4,ease:"elastic.out(1,0.3)"}));
+
+// scroll reveal
+const head=q("#revealHead");
+"スクロールで、動き出す。".split("").forEach(c=>{
+  const s=document.createElement("span"); s.className="r-word"; s.textContent=c; head.appendChild(s);
+});
+gsap.to(".r-word",{opacity:1,y:0,duration:0.5,stagger:0.04,scrollTrigger:{trigger:".reveal-strip",start:"top 75%"}});
+gsap.to(".rc",{opacity:1,y:0,duration:0.6,stagger:0.12,ease:"power2.out",scrollTrigger:{trigger:".reveal-cards",start:"top 80%"}});
+</script>
+</body>
+</html>

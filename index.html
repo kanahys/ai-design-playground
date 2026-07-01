@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-assisted design — sample outputs</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#080a0f;--surface:#0e1117;--border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.18);--text:#e8eaf0;--dim:#7a8092;--lime:#b8ff57;--cyan:#38f5ff}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+  .grid-bg{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,black 20%,transparent 90%)}
+  .wrap{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:14vh 6vw;flex:1;width:100%}
+  .kicker{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing:.35em;color:var(--lime);text-transform:uppercase;margin-bottom:1.4rem}
+  h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.2rem,7vw,4.5rem);line-height:.95;letter-spacing:-.02em}
+  .lead{margin-top:1.4rem;max-width:52ch;color:var(--dim);line-height:1.7;font-size:clamp(.95rem,2vw,1.08rem)}
+  .cards{margin-top:3.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.2rem}
+  a.card{display:flex;flex-direction:column;gap:.7rem;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.8rem;transition:transform .2s ease,border-color .2s ease}
+  a.card:hover{transform:translateY(-4px);border-color:var(--border2)}
+  .card .no{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--cyan)}
+  .card h2{font-family:'Syne',sans-serif;font-weight:700;font-size:1.4rem}
+  .card p{font-size:.84rem;color:var(--dim);line-height:1.6}
+  .card .go{margin-top:.4rem;font-family:'Space Mono',monospace;font-size:.72rem;color:var(--lime)}
+  footer{position:relative;z-index:1;padding:3vh 6vw;font-family:'Space Mono',monospace;font-size:.72rem;color:#454b59;border-top:1px solid var(--border);max-width:900px;margin:0 auto;width:100%}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="wrap">
+  <div class="kicker">AI-assisted · sample outputs</div>
+  <h1>デザイン業務での<br>AI活用サンプル</h1>
+  <p class="lead">社内共有用に作った、AI生成の実物デモ。カードから各サンプルへ。</p>
+  <div class="cards">
+    <a class="card" href="gsap-demo.html">
+      <span class="no">01</span>
+      <h2>GSAP できること図鑑</h2>
+      <p>代表的なアニメーションを、その場で再生して掴む。Figmaの外で動きを設計するための道具。</p>
+      <span class="go">開く →</span>
+    </a>
+    <a class="card" href="vibe-stack.html">
+      <span class="no">02</span>
+      <h2>VIBE STACK</h2>
+      <p>バイブコーディング向けのデザインライブラリ集。カテゴリで絞り込める1枚もの。</p>
+      <span class="go">開く →</span>
+    </a>
+  </div>
+</div>
+<footer>AI-assisted design — sample outputs · for internal share</footer>
+</body>
+</html>

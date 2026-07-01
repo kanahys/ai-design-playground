@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIBE STACK — Design Libraries for the Vibes Era</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #080a0f;
+    --surface: #0e1117;
+    --surface2: #141821;
+    --border: rgba(255,255,255,0.08);
+    --border-bright: rgba(255,255,255,0.18);
+    --text: #e8eaf0;
+    --dim: #7a8092;
+    --dimmer: #454b59;
+    --lime: #b8ff57;
+    --cyan: #38f5ff;
+    --orange: #ff6b35;
+    --pink: #ff3f8e;
+    --violet: #a78bfa;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* grid bg */
+  .grid-bg {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 52px 52px;
+    mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 20%, transparent 90%);
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 5vw; }
+
+  /* HERO */
+  header { padding: 12vh 0 6vh; }
+  .kicker {
+    font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.35em;
+    color: var(--lime); text-transform: uppercase; margin-bottom: 1.6rem;
+  }
+  header h1 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(2.8rem, 10vw, 7rem); line-height: 0.9; letter-spacing: -0.02em;
+  }
+  header h1 em { font-style: normal; color: var(--lime); }
+  header p {
+    margin-top: 1.8rem; max-width: 52ch; color: var(--dim);
+    font-size: clamp(0.95rem, 2vw, 1.12rem); line-height: 1.7;
+  }
+  .meta {
+    margin-top: 2.2rem; font-family: 'Space Mono', monospace; font-size: 0.72rem;
+    color: var(--dimmer); display: flex; gap: 1.4rem; flex-wrap: wrap;
+  }
+  .meta span::before { content: "▸ "; color: var(--cyan); }
+
+  /* FILTER */
+  .filters { display: flex; gap: 0.6rem; flex-wrap: wrap; margin: 4vh 0 2.5rem; position: sticky; top: 0; padding: 1rem 0; background: linear-gradient(var(--bg) 70%, transparent); z-index: 5; }
+  .fbtn {
+    font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.04em;
+    color: var(--dim); background: var(--surface); border: 1px solid var(--border);
+    padding: 0.5rem 1rem; border-radius: 999px; cursor: pointer; transition: all 0.18s ease;
+  }
+  .fbtn:hover { border-color: var(--border-bright); color: var(--text); }
+  .fbtn.active { background: var(--lime); color: #080a0f; border-color: var(--lime); }
+
+  /* CARDS */
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 1.2rem; padding-bottom: 10vh; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 1.6rem; display: flex; flex-direction: column; gap: 0.9rem;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    position: relative; overflow: hidden;
+  }
+  .card::after {
+    content: ""; position: absolute; inset: 0; border-radius: 16px; pointer-events: none;
+    box-shadow: inset 0 0 0 1px transparent; transition: box-shadow 0.2s ease;
+  }
+  .card:hover { transform: translateY(-4px); background: var(--surface2); border-color: var(--border-bright); }
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .cat {
+    font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--dim);
+    border: 1px solid var(--border); padding: 0.25rem 0.55rem; border-radius: 6px;
+  }
+  .tag { font-family: 'Space Mono', monospace; font-size: 0.62rem; padding: 0.25rem 0.5rem; border-radius: 6px; }
+  .name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.35rem; letter-spacing: -0.01em; }
+  .url { font-family: 'Space Mono', monospace; font-size: 0.72rem; color: var(--cyan); text-decoration: none; }
+  .url:hover { text-decoration: underline; }
+  .desc { font-size: 0.82rem; color: var(--dim); line-height: 1.65; flex: 1; }
+  .vibe { border-top: 1px solid var(--border); padding-top: 0.8rem; font-size: 0.78rem; }
+  .vibe b { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; color: var(--dimmer); text-transform: uppercase; display: block; margin-bottom: 0.25rem; }
+  .vibe i { font-style: italic; color: var(--text); }
+
+  .a-lime .name { color: var(--lime); }   .a-lime .tag { background: rgba(184,255,87,0.12); color: var(--lime); }
+  .a-cyan .name { color: var(--cyan); }   .a-cyan .tag { background: rgba(56,245,255,0.12); color: var(--cyan); }
+  .a-orange .name { color: var(--orange); } .a-orange .tag { background: rgba(255,107,53,0.12); color: var(--orange); }
+  .a-pink .name { color: var(--pink); }   .a-pink .tag { background: rgba(255,63,142,0.12); color: var(--pink); }
+  .a-violet .name { color: var(--violet); } .a-violet .tag { background: rgba(167,139,250,0.12); color: var(--violet); }
+
+  footer { border-top: 1px solid var(--border); padding: 4vh 0; font-family: 'Space Mono', monospace; font-size: 0.72rem; color: var(--dimmer); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } .card:hover { transform: none; } }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Curated · for the vibes era</div>
+    <h1>VIBE<br><em>STACK</em></h1>
+    <p>バイブコーディング向けの、クオリティと個性で選んだデザインライブラリ集。速く、気持ちよく、それっぽく作るための引き出し。</p>
+    <div class="meta">
+      <span>16 libraries</span>
+      <span>7 categories</span>
+      <span>sample output</span>
+    </div>
+  </header>
+
+  <div class="filters" id="filters">
+    <button class="fbtn active" data-f="all">ALL</button>
+    <button class="fbtn" data-f="css">CSS</button>
+    <button class="fbtn" data-f="component">Components</button>
+    <button class="fbtn" data-f="motion">Motion</button>
+    <button class="fbtn" data-f="icon">Icons</button>
+    <button class="fbtn" data-f="type">Type</button>
+    <button class="fbtn" data-f="3d">3D</button>
+    <button class="fbtn" data-f="color">Color</button>
+  </div>
+
+  <div class="cards" id="cards"></div>
+
+  <footer>VIBE STACK — sample output · AI-assisted deliverable for internal share</footer>
+</div>
+
+<script>
+const libs = [
+  {n:"Tailwind CSS", u:"tailwindcss.com", c:"css", cat:"Utility CSS", tag:"定番", a:"lime", d:"ユーティリティファーストの決定版。クラスを積むだけで速い。バイブコーディングの土台。", v:"手を止めずに書ける"},
+  {n:"UnoCSS", u:"unocss.dev", c:"css", cat:"Atomic CSS", tag:"高速", a:"cyan", d:"オンデマンド生成でビルドが軽い。Tailwind互換プリセットもある。", v:"軽さは正義"},
+  {n:"shadcn/ui", u:"ui.shadcn.com", c:"component", cat:"Components", tag:"人気", a:"lime", d:"コピペで持ってこられる高品質コンポーネント。所有権が自分に残る設計。", v:"自分のコードになる"},
+  {n:"Radix UI", u:"radix-ui.com", c:"component", cat:"Primitives", tag:"堅実", a:"cyan", d:"アクセシビリティ担保済みの土台。見た目は自分で盛る前提。", v:"見えない品質を任せる"},
+  {n:"Aceternity UI", u:"ui.aceternity.com", c:"component", cat:"Fancy UI", tag:"映え", a:"pink", d:"派手めのアニメ入りコンポーネント。デモ映えするLPに強い。", v:"一発で掴む日に"},
+  {n:"Motion", u:"motion.dev", c:"motion", cat:"Animation", tag:"最強", a:"lime", d:"元Framer Motion。フレームワーク非依存。宣言的にスプリングもジェスチャーも。", v:"動きに命を吹き込む"},
+  {n:"GSAP", u:"gsap.com", c:"motion", cat:"Animation Engine", tag:"高性能", a:"orange", d:"プロ現場の業界標準。ScrollTrigger・MorphSVG。重いが確実に動く。", v:"受賞サイト作りたい日に"},
+  {n:"LottieFiles", u:"lottiefiles.com", c:"motion", cat:"Lottie", tag:"即戦力", a:"cyan", d:"After EffectsのアニメをJSONで。ローディング・成功・エラーが一瞬で揃う。", v:"空白を埋めるもの"},
+  {n:"Lucide", u:"lucide.dev", c:"icon", cat:"Icons", tag:"軽量", a:"lime", d:"Featherの後継。統一感のある線アイコン。ほぼ全FWにパッケージあり。", v:"迷ったらこれ"},
+  {n:"Phosphor Icons", u:"phosphoricons.com", c:"icon", cat:"Icons", tag:"多様", a:"violet", d:"6ウェイト展開で表情が豊か。トーンを揃えやすい。", v:"太さで遊べる"},
+  {n:"Fontshare", u:"fontshare.com", c:"type", cat:"Fonts", tag:"無料", a:"lime", d:"商用可の上質な欧文フォント集。個性のあるディスプレイ体が揃う。", v:"顔つきを決める"},
+  {n:"Google Fonts", u:"fonts.google.com", c:"type", cat:"Fonts", tag:"定番", a:"cyan", d:"言わずと知れた。日本語もNoto系で安定。組み合わせで差をつける。", v:"外さない安心"},
+  {n:"Three.js", u:"threejs.org", c:"3d", cat:"WebGL", tag:"王道", a:"orange", d:"WebGLの定番ラッパー。GLB読み込みで3D表現をWebに。板ポリ2.5Dにも。", v:"奥行きが欲しい日に"},
+  {n:"Spline", u:"spline.design", c:"3d", cat:"3D Tool", tag:"ノーコード", a:"pink", d:"ブラウザで3Dを組んで書き出せる。コード書かずにリッチFV。", v:"手早く立体を"},
+  {n:"Coolors", u:"coolors.co", c:"color", cat:"Palette", tag:"鉄板", a:"violet", d:"スペースキー連打でパレット生成。配色の当たりを高速で探す。", v:"色に詰まったら"},
+  {n:"Realtime Colors", u:"realtimecolors.com", c:"color", cat:"Palette", tag:"実戦的", a:"lime", d:"実UIに色を当てながら確認できる。コントラストの安全確認に便利。", v:"当てて確かめる"},
+];
+
+const cardsEl = document.getElementById("cards");
+function render(filter){
+  cardsEl.innerHTML = "";
+  libs.filter(l => filter==="all" || l.c===filter).forEach(l => {
+    const el = document.createElement("div");
+    el.className = "card a-"+l.a;
+    el.innerHTML = `
+      <div class="card-top"><span class="cat">${l.cat}</span><span class="tag">${l.tag}</span></div>
+      <div class="name">${l.n}</div>
+      <a class="url" href="https://${l.u}" target="_blank" rel="noopener">${l.u}</a>
+      <p class="desc">${l.d}</p>
+      <div class="vibe"><b>Vibe</b><i>“${l.v}”</i></div>`;
+    cardsEl.appendChild(el);
+  });
+}
+render("all");
+
+document.getElementById("filters").addEventListener("click", e => {
+  const b = e.target.closest(".fbtn"); if(!b) return;
+  document.querySelectorAll(".fbtn").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");
+  render(b.dataset.f);
+});
+</script>
+</body>
+</html>
